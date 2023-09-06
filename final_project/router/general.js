@@ -6,38 +6,66 @@ const public_users = express.Router();
 
 
 public_users.post("/register", (req,res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    const username = req.query.username;
+    const password = req.query.password;
+
+    if (username && password) {
+      if (!isValid(username)) { 
+        users.push({"username":username,"password":password});
+        return res.status(200).json({message: "User successfully registred. Now you can login"});
+      } else {
+        return res.status(404).json({message: "User already exists!"});    
+      }
+    } 
+    return res.status(404).json({message: "Unable to register user."});
 });
 
-// Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let getBookPromise = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            return  res.send(JSON.stringify({books},null,4));
+        },5000)
+    })
 });
 
-// Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  let getDetailksPromise = new Promise((resolve,reject) => {
+    setTimeout(() => {
+        const ISBN = req.params.isbn;
+        const arrayBooks = Object.values(books);
+        const filteredByIsbnBook = arrayBooks.filter((book) => book.ISBN === ISBN);
+        res.send(JSON.stringify({filteredByIsbnBook},null,4));
+    }, 3000)
+  })
  });
   
-// Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let getDetailsPromise = new Promise((resolve,reject) => {
+        setTimeout(() => {
+            const author = req.params.author;
+            const arrayBooks = Object.values(books);
+            const filteredByAuthor = arrayBooks.filter((book) => book.author.toLowerCase() === author.toLowerCase());
+            res.send(JSON.stringify({filteredByAuthor},null,4));
+        },2000) 
+    })
 });
 
-// Get all books based on title
 public_users.get('/title/:title',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let getBookByTitlePromise = new Promise((resolve,reject) => { 
+        setTimeout(() => {
+            const title = req.params.title;
+            const arrayBooks = Object.values(books);
+            const filteredByTitle = arrayBooks.filter((book) => book.title.toLowerCase() === title.toLowerCase());
+            res.send(JSON.stringify({filteredByTitle},null,4));
+        },2000)
+    })
 });
 
-//  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+ const ISBN = req.params.isbn;
+ const arrayBooks = Object.values(books);
+ const filteredByIsbnBook = arrayBooks.filter((book) => book.ISBN === ISBN);
+ res.send(JSON.stringify(filteredByIsbnBook[0].reviews,null,4));
 });
 
 module.exports.general = public_users;
